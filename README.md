@@ -15,7 +15,7 @@ customer data, and implementation specifics are deliberately omitted.*
 
 Engineers reviewing a customer's planned network upgrade have to filter large volumes of known
 software defects to determine which ones will realistically affect that customer's deployment.
-Done manually, that meant reading and transferring up to **2,000 defect records** one at a time
+Done manually, that meant reading and transferring **200+ defect records** one at a time
 into an analysis step — the single largest time sink in the process.
 
 ## What I Built
@@ -35,7 +35,7 @@ control while explicitly avoiding navigation buttons that would advance the reco
 of the page and captured blanks. I replaced them with a dynamic wait: don't capture until the
 new record ID is actually visible on screen.
 
-**Memory pressure at scale.** Processing thousands of records in one session froze the browser.
+**Memory pressure at scale.** Large batches in a single session froze the browser.
 I added hard iteration ceilings and memory-efficient handling to keep runs bounded.
 
 **Infinite loops on stalled pages.** If the interface lagged and failed to advance, the script
@@ -43,7 +43,7 @@ would capture the same record forever. I added ID tracking — on detecting a du
 recognizes it's stuck, retries, and halts safely if it still can't advance.
 
 **Catastrophic data loss on error.** Early versions crashed entirely on a single malformed
-record, destroying hundreds of successful captures. I wrapped the extraction loop in error
+record, destroying every successful capture in the run. I wrapped the extraction loop in error
 handling that performs a salvage: on fatal error, stop and persist everything captured so far.
 
 **Browser clipboard restrictions.** Modern browsers block programmatic clipboard writes for
